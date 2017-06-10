@@ -1,7 +1,8 @@
-package com.moensun.grpc;
+package com.moensun.grpc.server;
 
+import com.moensun.grpc.MSGrpcException;
 import com.moensun.grpc.annotations.GrpcService;
-import com.moensun.grpc.properties.GrpcServerProperties;
+import com.moensun.grpc.server.properties.GrpcServerProperties;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;

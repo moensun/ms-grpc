@@ -1,4 +1,5 @@
-package com.moensun.grpc.properties;
+package com.moensun.grpc.client.properties;
+
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -17,6 +18,7 @@ public class GrpcClientProperties {
 	public static final String GRPC_CLIENT_PREFIX = "ms.grpc.client";
 	private Integer port;
 	private String host;
+	private Boolean usePlaintext;
 
 	public Integer getPort() {
 		return port;
@@ -32,5 +34,13 @@ public class GrpcClientProperties {
 
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	public Boolean getUsePlaintext() {
+		return usePlaintext;
+	}
+
+	public void setUsePlaintext(Boolean usePlaintext) {
+		this.usePlaintext = usePlaintext;
 	}
 }

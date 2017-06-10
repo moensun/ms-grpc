@@ -1,6 +1,6 @@
-package com.moensun.grpc.configuration;
+package com.moensun.grpc.client.configuration;
 
-import com.moensun.grpc.properties.GrpcServerProperties;
+import com.moensun.grpc.client.properties.GrpcClientProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,12 +9,11 @@ import org.springframework.context.annotation.Configuration;
  * Copyright MoenSun
  * User: Bane.Shi
  * Date: 2017/6/10
- * Time: 17:25
+ * Time: 19:46
  */
 @Configuration
 @EnableConfigurationProperties(value = {
-        GrpcServerProperties.class
+        GrpcClientProperties.class
 })
-public class PropertiesConfiguration
-{
+public class ClientPropertiesConfiguration {
 }

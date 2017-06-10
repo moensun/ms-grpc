@@ -1,4 +1,4 @@
-package com.moensun.grpc.configuration;
+package com.moensun.grpc.server.configuration;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(
-        basePackages = {"com.moensun.grpc"}
+        basePackages = {"com.moensun.grpc.server"}
 )
-public class ScanConfiguration {
+public class ServerScanConfiguration {
 }
