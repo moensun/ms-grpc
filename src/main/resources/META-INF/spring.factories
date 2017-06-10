@@ -1,2 +1,4 @@
 com.moensun.grpc.server.properties.GrpcServerProperties=\
-com.moensun.grpc.server.configuration.PropertiesConfiguration  
+com.moensun.grpc.client.properties.GrpcClientProperties=\
+com.moensun.grpc.server.configuration.ServerPropertiesConfiguration=\
+com.moensun.grpc.client.configuration.ClientPropertiesConfiguration  
