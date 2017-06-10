@@ -15,10 +15,10 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 public class SpringSupportAware implements BeanPostProcessor {
 
 	public Object postProcessBeforeInitialization(Object o, String s) throws BeansException {
-		return null;
+		return o;
 	}
 
 	public Object postProcessAfterInitialization(Object o, String s) throws BeansException {
-		return null;
+		return o;
 	}
 }
