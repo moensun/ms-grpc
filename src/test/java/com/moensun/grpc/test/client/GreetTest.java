@@ -5,6 +5,7 @@ import com.moensun.grpc.service.HelloReply;
 import com.moensun.grpc.service.HelloRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.netty.NettyChannelBuilder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,6 +29,21 @@ public class GreetTest extends BaseGrpcTest {
                 .forAddress("127.0.0.1",50051)
                 .usePlaintext(true)
                 .build();
+        GreeterGrpc.GreeterBlockingStub blockingStub = GreeterGrpc.newBlockingStub(channel);
+        HelloRequest request = HelloRequest.newBuilder().setName("gggg").build();
+        HelloReply response;
+        blockingStub.sayHello(request);
+
+        try {
+            channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void nettyChannel(){
+        ManagedChannel channel = NettyChannelBuilder.forAddress("127.0.0.1",50051).usePlaintext(true).build();
         GreeterGrpc.GreeterBlockingStub blockingStub = GreeterGrpc.newBlockingStub(channel);
         HelloRequest request = HelloRequest.newBuilder().setName("gggg").build();
         HelloReply response;
