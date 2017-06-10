@@ -65,7 +65,7 @@ public class GrpcServer implements ApplicationListener {
         try {
             server = serverBuilder.build().start();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new MSGrpcException("grpc start error");
         }
     }
 
