@@ -14,6 +14,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-@Import(value = {com.moensun.grpc.server.GrpcServer.class})
+@Import(value = {com.moensun.grpc.server.configuration.ServerScanConfiguration.class})
 public @interface EnableGrpcServer {
 }
