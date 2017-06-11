@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -69,9 +70,26 @@ public class GrpcServer implements ApplicationListener {
         try {
             server = serverBuilder.build().start();
             logger.info("GRPC Server started at port{}",grpcServerProperties.getPort());
+            startAwait();
         } catch (IOException e) {
             throw new MSGrpcException("grpc start error");
         }
+    }
+
+    private void startAwait(){
+        Thread awaitThread = new Thread(){
+            public void run(){
+                try {
+                    if(Objects.nonNull(server)){
+                        server.awaitTermination();
+                    }
+                } catch (InterruptedException e) {
+                    throw new MSGrpcException(e.getMessage());
+                }
+            }
+        };
+        awaitThread.setDaemon(false);
+        awaitThread.start();
     }
 
 }
