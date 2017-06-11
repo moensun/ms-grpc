@@ -15,5 +15,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 public class App {
     public static void main(String[] args){
         new SpringApplicationBuilder(App.class).web(false).run(args);
+/*        SpringApplication application = new SpringApplication(App.class);
+		application.setWebEnvironment(false);
+		application.run(args);*/
     }
 }
