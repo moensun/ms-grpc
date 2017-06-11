@@ -7,6 +7,8 @@ import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.ServerServiceDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
@@ -29,7 +32,7 @@ import java.util.stream.Stream;
  */
 @Component
 public class GrpcServer implements ApplicationListener {
-
+    private static final Logger logger = LoggerFactory.getLogger(GrpcServer.class);
     @Autowired
     private AbstractApplicationContext applicationContext;
     @Autowired
@@ -65,6 +68,7 @@ public class GrpcServer implements ApplicationListener {
 
         try {
             server = serverBuilder.build().start();
+            logger.info("GRPC Server started at port{}",grpcServerProperties.getPort());
         } catch (IOException e) {
             throw new MSGrpcException("grpc start error");
         }
