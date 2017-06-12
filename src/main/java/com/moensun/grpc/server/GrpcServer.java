@@ -3,10 +3,7 @@ package com.moensun.grpc.server;
 import com.moensun.grpc.MSGrpcException;
 import com.moensun.grpc.annotations.GrpcService;
 import com.moensun.grpc.server.properties.GrpcServerProperties;
-import io.grpc.BindableService;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import io.grpc.ServerServiceDefinition;
+import io.grpc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,8 @@ public class GrpcServer implements ApplicationListener {
     private AbstractApplicationContext applicationContext;
     @Autowired
     private GrpcServerProperties grpcServerProperties;
+    @Autowired
+    private ServerInterceptor serverInterceptor;
     private Server server;
 
     @Override
@@ -64,7 +63,11 @@ public class GrpcServer implements ApplicationListener {
         }).forEach(name->{
             BindableService srv = applicationContext.getBeanFactory().getBean(name, BindableService.class);
             ServerServiceDefinition serviceDefinition = srv.bindService();
-            serverBuilder.addService(serviceDefinition);
+            if(Objects.isNull(serverInterceptor)){
+                serverBuilder.addService(serviceDefinition);
+            }else{
+                serverBuilder.addService(ServerInterceptors.intercept(serviceDefinition,serverInterceptor));
+            }
         });
 
         try {
