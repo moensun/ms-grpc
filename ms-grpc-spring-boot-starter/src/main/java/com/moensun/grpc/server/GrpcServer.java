@@ -75,7 +75,7 @@ public class GrpcServer implements ApplicationListener {
             logger.info("GRPC Server started at port{}",grpcServerProperties.getPort());
             startAwait();
         } catch (IOException e) {
-            throw new MSGrpcException("grpc start error:{}" + e.getMessage());
+            throw new MSGrpcException("grpc start error:" + e.getMessage());
         }
     }
 
