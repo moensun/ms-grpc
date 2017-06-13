@@ -2,7 +2,9 @@ package com.moensun.grpc.server;
 
 import com.moensun.grpc.MSGrpcException;
 import com.moensun.grpc.annotations.GrpcService;
+import com.moensun.grpc.server.interceptor.GrpcInterceptorRegistration;
 import com.moensun.grpc.server.interceptor.GrpcInterceptorRegistry;
+import com.moensun.grpc.server.interceptor.GrpcServerConfigurer;
 import com.moensun.grpc.server.properties.GrpcServerProperties;
 import io.grpc.*;
 import org.slf4j.Logger;
@@ -51,6 +53,9 @@ public class GrpcServer implements ApplicationListener {
     }
 
     public void startServer() {
+
+        preHandle();
+
         ServerBuilder serverBuilder = ServerBuilder.forPort(grpcServerProperties.getPort());
 
         Stream.of(applicationContext.getBeanNamesForType(BindableService.class)).filter(name->{
@@ -102,5 +107,17 @@ public class GrpcServer implements ApplicationListener {
         });
         return serverInterceptors;
     }
+
+    private void preHandle(){
+        if(applicationContext.getBeanFactory().getBeanNamesForType(GrpcServerConfigurer.class).length >0){
+            Map<String,GrpcServerConfigurer> map = applicationContext.getBeanFactory().getBeansOfType(GrpcServerConfigurer.class);
+            for (Map.Entry<String,GrpcServerConfigurer> item:map.entrySet()) {
+                if(Objects.nonNull(item.getValue())){
+                    item.getValue().addInterceptors(grpcInterceptorRegistry);
+                }
+            }
+        }
+    }
+
 
 }
