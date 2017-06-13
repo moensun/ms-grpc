@@ -2,6 +2,7 @@ package com.moensun.grpc.server;
 
 import com.moensun.grpc.MSGrpcException;
 import com.moensun.grpc.annotations.GrpcService;
+import com.moensun.grpc.server.interceptor.GrpcInterceptorRegistry;
 import com.moensun.grpc.server.properties.GrpcServerProperties;
 import io.grpc.*;
 import org.slf4j.Logger;
@@ -16,6 +17,8 @@ import org.springframework.core.type.StandardMethodMetadata;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -36,7 +39,8 @@ public class GrpcServer implements ApplicationListener {
     @Autowired
     private GrpcServerProperties grpcServerProperties;
     @Autowired
-    private ServerInterceptor serverInterceptor;
+    private GrpcInterceptorRegistry grpcInterceptorRegistry;
+
     private Server server;
 
     @Override
@@ -63,11 +67,7 @@ public class GrpcServer implements ApplicationListener {
         }).forEach(name->{
             BindableService srv = applicationContext.getBeanFactory().getBean(name, BindableService.class);
             ServerServiceDefinition serviceDefinition = srv.bindService();
-            if(Objects.isNull(serverInterceptor)){
-                serverBuilder.addService(serviceDefinition);
-            }else{
-                serverBuilder.addService(ServerInterceptors.intercept(serviceDefinition,serverInterceptor));
-            }
+            serverBuilder.addService(ServerInterceptors.intercept(serviceDefinition,getInterceptors()));
         });
 
         try {
@@ -75,7 +75,7 @@ public class GrpcServer implements ApplicationListener {
             logger.info("GRPC Server started at port{}",grpcServerProperties.getPort());
             startAwait();
         } catch (IOException e) {
-            throw new MSGrpcException("grpc start error");
+            throw new MSGrpcException("grpc start error:{}" + e.getMessage());
         }
     }
 
@@ -93,6 +93,14 @@ public class GrpcServer implements ApplicationListener {
         };
         awaitThread.setDaemon(false);
         awaitThread.start();
+    }
+
+    protected List<ServerInterceptor> getInterceptors(){
+        List<ServerInterceptor> serverInterceptors = new ArrayList<>();
+        grpcInterceptorRegistry.getRegistrations().forEach(registration->{
+            serverInterceptors.add(registration.getServerInterceptor());
+        });
+        return serverInterceptors;
     }
 
 }
