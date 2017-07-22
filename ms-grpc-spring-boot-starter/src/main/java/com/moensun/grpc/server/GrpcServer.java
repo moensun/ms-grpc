@@ -73,6 +73,7 @@ public class GrpcServer implements ApplicationListener {
             BindableService srv = applicationContext.getBeanFactory().getBean(name, BindableService.class);
             ServerServiceDefinition serviceDefinition = srv.bindService();
             serverBuilder.addService(ServerInterceptors.intercept(serviceDefinition,getInterceptors()));
+			logger.info("GRPC Service add {}",name);
         });
 
         try {
