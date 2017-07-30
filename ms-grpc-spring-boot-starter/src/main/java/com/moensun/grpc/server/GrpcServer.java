@@ -73,6 +73,7 @@ public class GrpcServer implements ApplicationListener {
             BindableService srv = applicationContext.getBeanFactory().getBean(name, BindableService.class);
             ServerServiceDefinition serviceDefinition = srv.bindService();
             serverBuilder.addService(ServerInterceptors.intercept(serviceDefinition,getInterceptors()));
+			logger.info("GRPC Service add {}",name);
         });
 
         try {
@@ -80,6 +81,7 @@ public class GrpcServer implements ApplicationListener {
             logger.info("GRPC Server started at port{}",grpcServerProperties.getPort());
             startAwait();
         } catch (IOException e) {
+            logger.info(e.getMessage(),e);
             throw new MSGrpcException("grpc start error:" + e.getMessage());
         }
     }
